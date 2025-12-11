@@ -8,6 +8,7 @@
 
 #include "tca9554_bsp.h"
 #include "sdcard_bsp.h"
+#include "rtc_bsp.h"
 
 static const char *TAG = "BOARD_BSP";
 /* I2C 总线句柄：0 号用于通用外设，1 号留给触摸等设备 */
@@ -40,20 +41,27 @@ static void i2c_master_bus_init(i2c_master_bus_handle_t *bus_handle) {
  * @brief 初始化板级外设：先建两路 I2C，再初始化 TCA9554 并点亮背光
  */
 void board_bsp_init(void) {
+
+  /* 初始化I2C总线 */
   i2c_master_bus_init(i2c_bus_handle);
   ESP_LOGI(TAG, "I2C bus initialization successful");
 
+  /* 初始化拓展IO芯片 */
   esp_err_t ret = tca9554_bsp_init();
   if (ret != ESP_OK) {
     ESP_LOGE(TAG, "TCA9554 init failed: %s", esp_err_to_name(ret));
     return;
   }
 
+  /* 设置拓展IO的值 */
   vTaskDelay(pdMS_TO_TICKS(10));
   ret = exio_pin_set_value(LCD_BL_PIN, 1);
   if (ret != ESP_OK) {
     ESP_LOGE(TAG, "Set LCD_BL_PIN failed: %s", esp_err_to_name(ret));
   }
 
+  rtc_bsp_init();
+
+  /* 初始化SD卡 */
   sdcard_bsp_init();
 }
