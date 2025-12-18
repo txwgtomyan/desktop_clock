@@ -58,6 +58,8 @@ void board_bsp_init(void) {
   /* 初始化LCD屏幕 */
   lcd_bsp_init();
 
+  lcd_touch_bsp_init();
+  
   /* 设置拓展IO的值 */
   vTaskDelay(pdMS_TO_TICKS(10));
   ret = exio_pin_set_value(LCD_BL_PIN, 1);

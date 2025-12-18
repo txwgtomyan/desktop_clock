@@ -9,6 +9,8 @@
 #define Touch_SCL_NUM (GPIO_NUM_18)
 #define Touch_SDA_NUM (GPIO_NUM_17)
 
+#define DISP_TOUCH_ADDR               (0x3B)
+
 #define EXAMPLE_LCD_H_RES              172
 #define EXAMPLE_LCD_V_RES              640
 #define LVGL_DMA_BUFF_LEN    (EXAMPLE_LCD_H_RES * 64 * 2)
