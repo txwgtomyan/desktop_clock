@@ -9,6 +9,7 @@
 #include "tca9554_bsp.h"
 #include "sdcard_bsp.h"
 #include "rtc_bsp.h"
+#include "lcd_bsp.h"
 
 static const char *TAG = "BOARD_BSP";
 /* I2C 总线句柄：0 号用于通用外设，1 号留给触摸等设备 */
@@ -19,6 +20,7 @@ i2c_master_bus_handle_t i2c_bus_handle[MAX_I2C_BUS_NUM];
  * @brief 初始化两路 I2C 主机总线
  *        bus_handle[0]：SDA/SCL = I2C_MASTER_SDA_IO / I2C_MASTER_SCL_IO
  *        bus_handle[1]：SDA/SCL = Touch_SDA_NUM / Touch_SCL_NUM
+ * @note I2C0 用于通用外设，I2C1 用于触摸屏
  */
 static void i2c_master_bus_init(i2c_master_bus_handle_t *bus_handle) {
   i2c_master_bus_config_t i2c_bus_config = {
@@ -52,6 +54,9 @@ void board_bsp_init(void) {
     ESP_LOGE(TAG, "TCA9554 init failed: %s", esp_err_to_name(ret));
     return;
   }
+
+  /* 初始化LCD屏幕 */
+  lcd_bsp_init();
 
   /* 设置拓展IO的值 */
   vTaskDelay(pdMS_TO_TICKS(10));

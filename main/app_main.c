@@ -17,11 +17,11 @@ void app_main(void)
     printf("hello word");
     board_bsp_init();
 
-    for(int i = 0 ; i <10 ; i++) {
-        printf("Restarting in %d seconds...\n", 10 - i);
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
+    // for(int i = 0 ; i <10 ; i++) {
+    //     printf("Restarting in %d seconds...\n", 10 - i);
+    //     vTaskDelay(pdMS_TO_TICKS(1000));
+    // }
 
-    fflush(stdout);
-    esp_restart();
+    // fflush(stdout);
+    // esp_restart();
 }
