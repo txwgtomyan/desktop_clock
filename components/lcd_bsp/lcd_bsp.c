@@ -17,8 +17,8 @@
 #include <stdint.h>
 
 static const char *TAG = "LCD_BSP";
-static esp_lcd_panel_io_handle_t s_panel_io = NULL;
-static esp_lcd_panel_handle_t s_panel = NULL;
+esp_lcd_panel_io_handle_t s_panel_io = NULL;
+esp_lcd_panel_handle_t s_panel = NULL;
 static uint16_t *s_fill_buf = NULL;
 static i2c_master_dev_handle_t s_touch_dev = NULL;
 static i2c_master_bus_handle_t s_touch_bus = NULL;
@@ -98,7 +98,7 @@ esp_err_t lcd_bsp_init(void)
     buscfg.data2_io_num = EXAMPLE_PIN_NUM_LCD_DATA2;
     buscfg.data3_io_num = EXAMPLE_PIN_NUM_LCD_DATA3;
     buscfg.max_transfer_sz = LVGL_DMA_BUFF_LEN;
-    ESP_ERROR_CHECK(spi_bus_initialize(SPI3_HOST, &buscfg, SPI_DMA_CH_AUTO));
+    ESP_ERROR_CHECK(spi_bus_initialize(LCD_HOST, &buscfg, SPI_DMA_CH_AUTO));
 
     ESP_LOGI(TAG, "Install panel IO");
 
@@ -113,7 +113,7 @@ esp_err_t lcd_bsp_init(void)
     io_config.lcd_param_bits = 8;
     io_config.on_color_trans_done = NULL; // 完成回调，不需要
     io_config.flags.quad_mode = true;     // 启用 QSPI 4 线
-    ESP_ERROR_CHECK(esp_lcd_new_panel_io_spi(SPI3_HOST, &io_config, &s_panel_io));
+    ESP_ERROR_CHECK(esp_lcd_new_panel_io_spi(LCD_HOST, &io_config, &s_panel_io));
 
     /* 厂商配置与面板配置 */
     axs15231b_vendor_config_t vendor_config = {};

@@ -9,7 +9,7 @@
 #include "tca9554_bsp.h"
 #include "sdcard_bsp.h"
 #include "rtc_bsp.h"
-#include "lcd_bsp.h"
+#include "lvgl_bsp.h"
 
 static const char *TAG = "BOARD_BSP";
 /* I2C 总线句柄：0 号用于通用外设，1 号留给触摸等设备 */
@@ -55,10 +55,7 @@ void board_bsp_init(void) {
     return;
   }
 
-  /* 初始化LCD屏幕 */
-  lcd_bsp_init();
-
-  lcd_touch_bsp_init();
+  lvgl_bsp_init();
   
   /* 设置拓展IO的值 */
   vTaskDelay(pdMS_TO_TICKS(10));

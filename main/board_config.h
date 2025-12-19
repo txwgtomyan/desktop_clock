@@ -11,10 +11,7 @@
 
 #define DISP_TOUCH_ADDR               (0x3B)
 
-#define EXAMPLE_LCD_H_RES              172
-#define EXAMPLE_LCD_V_RES              640
-#define LVGL_DMA_BUFF_LEN    (EXAMPLE_LCD_H_RES * 64 * 2)
-#define LVGL_SPIRAM_BUFF_LEN (EXAMPLE_LCD_H_RES * EXAMPLE_LCD_V_RES * 2)
+#define LCD_HOST  SPI3_HOST
 
 #define EXAMPLE_PIN_NUM_LCD_CS            (GPIO_NUM_9)
 #define EXAMPLE_PIN_NUM_LCD_PCLK          (GPIO_NUM_10) 
@@ -25,4 +22,8 @@
 #define EXAMPLE_PIN_NUM_LCD_RST           (GPIO_NUM_21)
 #define EXAMPLE_PIN_NUM_BK_LIGHT          (GPIO_NUM_8)
 
+#define EXAMPLE_LCD_H_RES 172
+#define EXAMPLE_LCD_V_RES 640
+#define LVGL_DMA_BUFF_LEN (EXAMPLE_LCD_H_RES * 64 * 2)
+#define LVGL_SPIRAM_BUFF_LEN (EXAMPLE_LCD_H_RES * EXAMPLE_LCD_V_RES * 2)
 #endif
