@@ -2,6 +2,7 @@
 #define COMPONENTS_LCD_BSP_INCLUDE_LCD_BSP_H_
 
 #include "esp_err.h"
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,7 +29,14 @@ esp_err_t lcd_touch_bsp_init(void);
  * @return ESP_OK 成功，ESP_ERR_INVALID_STATE 表示未初始化，其他为 I2C 错误
  */
 esp_err_t lcd_touch_read_point(uint16_t *x, uint16_t *y);
-esp_err_t lcd_touch_bsp_init(void);
+/**
+ * @brief 读取触摸状态与坐标（参考 refer/main 行为）
+ * @param[out] pressed 是否按下（true=按下，false=释放）
+ * @param[out] x       触摸原始 X（来自触摸芯片寄存器解析）
+ * @param[out] y       触摸原始 Y（来自触摸芯片寄存器解析）
+ * @return ESP_OK 成功，其他错误码表示 I2C 读失败
+ */
+esp_err_t lcd_touch_read(bool *pressed, uint16_t *x, uint16_t *y);
 #ifdef __cplusplus
 }
 #endif

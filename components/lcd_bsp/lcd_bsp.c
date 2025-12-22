@@ -15,6 +15,7 @@
 #include "freertos/idf_additions.h"
 #include "freertos/task.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 static const char *TAG = "LCD_BSP";
 esp_lcd_panel_io_handle_t s_panel_io = NULL;
@@ -170,6 +171,37 @@ esp_err_t lcd_touch_read_point(uint16_t *x, uint16_t *y)
     *y = (((uint16_t)buff[4] & 0x0f) << 8) | (uint16_t)buff[5];
 
     ESP_LOGD(TAG, "Touch X: %u, Y: %u", (unsigned)*x, (unsigned)*y);
+    return ESP_OK;
+}
+
+esp_err_t lcd_touch_read(bool *pressed, uint16_t *x, uint16_t *y)
+{
+    ESP_RETURN_ON_FALSE(s_touch_dev != NULL, ESP_ERR_INVALID_STATE, TAG, "touch not init");
+    if (!pressed || !x || !y) {
+        return ESP_ERR_INVALID_ARG;
+    }
+
+    const uint8_t read_touchpad_cmd[11] = {0xb5, 0xab, 0xa5, 0x5a, 0x0, 0x0, 0x0, 0x0e, 0x0, 0x0, 0x0};
+    uint8_t buff[32] = {0};
+
+    esp_err_t ret = i2c_master_transmit_receive(s_touch_dev, read_touchpad_cmd, sizeof(read_touchpad_cmd), buff, sizeof(buff), pdMS_TO_TICKS(200));
+    if (ret != ESP_OK) {
+        ESP_LOGW(TAG, "touch read failed: %s", esp_err_to_name(ret));
+        *pressed = false;
+        return ret;
+    }
+
+    /* 参考 refer：buff[1] 表示触摸点数量/状态 */
+    if (buff[1] > 0 && buff[1] < 5) {
+        *pressed = true;
+    } else {
+        *pressed = false;
+    }
+
+    *x = (uint16_t)((((uint16_t)buff[2] & 0x0F) << 8) | (uint16_t)buff[3]);
+    *y = (uint16_t)((((uint16_t)buff[4] & 0x0F) << 8) | (uint16_t)buff[5]);
+
+    ESP_LOGD(TAG, "Touch pressed=%d, X=%u, Y=%u", (int)*pressed, (unsigned)*x, (unsigned)*y);
     return ESP_OK;
 }
 
